@@ -1,0 +1,40 @@
+name: Win10 x64  
+  
+on:  
+  push:  
+    branches: [ master ]  
+  pull_request:  
+    branches: [ master ]  
+  workflow_dispatch:  
+  
+jobs:  
+  build:  
+    runs-on: windows-latest  
+    defaults:  
+      run:  
+        shell: msys2 {0}  
+    steps:  
+      - uses: actions/checkout@v4  
+      - uses: msys2/setup-msys2@v2  
+        with:  
+          msystem: MINGW64  
+          update: true  
+          install: base-devel git mingw-w64-x86_64-toolchain mingw-w64-x86_64-glfw mingw-w64-x86_64-cmake  
+      - name: clone-libvgm  
+        run: git clone -n https://github.com/valleybell/libvgm  
+      - name: checkout-libvgm  
+        run: git -C libvgm checkout 5fe3883a  
+      - name: cmake-libvgm  
+        run: cmake -S libvgm -B libvgm/build -G "MSYS Makefiles" -D AUDIODRV_LIBAO=OFF -D CMAKE_INSTALL_PREFIX=/mingw64  
+      - name: build-libvgm  
+        run: cmake --build libvgm/build  
+      - name: install-libvgm  
+        run: cmake --install libvgm/build  
+      - name: init-submodules  
+        run: git submodule update --init --recursive  
+      - name: make  
+        run: make bin/mmlgui RELEASE=1  
+      - uses: actions/upload-artifact@v4  
+        with:  
+          name: binary  
+          path: bin/mmlgui.exe
