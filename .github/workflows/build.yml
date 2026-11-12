@@ -25,7 +25,7 @@ jobs:
       - name: checkout-libvgm  
         run: git -C libvgm checkout 5fe3883a  
       - name: cmake-libvgm  
-        run: cmake -S libvgm -B libvgm/build -G "MSYS Makefiles" -D CMAKE_POLICY_VERSION_MINIMUM=3.5 -D AUDIODRV_LIBAO=OFF -D CMAKE_INSTALL_PREFIX=/ucrt64  
+        run: cmake -S libvgm -B libvgm/build -G "MSYS Makefiles" -D CMAKE_POLICY_VERSION_MINIMUM=3.5 -D CMAKE_C_FLAGS="-std=gnu11" -D CMAKE_CXX_FLAGS="-std=gnu++14" -D AUDIODRV_LIBAO=OFF -D CMAKE_INSTALL_PREFIX=/ucrt64  
       - name: build-libvgm  
         run: cmake --build libvgm/build  
       - name: install-libvgm  
