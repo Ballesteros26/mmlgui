@@ -17,15 +17,15 @@ jobs:
       - uses: actions/checkout@v4  
       - uses: msys2/setup-msys2@v2  
         with:  
-          msystem: MINGW64  
+          msystem: UCRT64  
           update: true  
-          install: base-devel git mingw-w64-x86_64-toolchain mingw-w64-x86_64-glfw mingw-w64-x86_64-cmake  
+          install: base-devel git mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-glfw mingw-w64-ucrt-x86_64-cmake  
       - name: clone-libvgm  
         run: git clone -n https://github.com/valleybell/libvgm  
       - name: checkout-libvgm  
         run: git -C libvgm checkout 5fe3883a  
       - name: cmake-libvgm  
-        run: cmake -S libvgm -B libvgm/build -G "MSYS Makefiles" -D AUDIODRV_LIBAO=OFF -D CMAKE_INSTALL_PREFIX=/mingw64  
+        run: cmake -S libvgm -B libvgm/build -G "MSYS Makefiles" -D CMAKE_POLICY_VERSION_MINIMUM=3.5 -D AUDIODRV_LIBAO=OFF -D CMAKE_INSTALL_PREFIX=/ucrt64  
       - name: build-libvgm  
         run: cmake --build libvgm/build  
       - name: install-libvgm  
